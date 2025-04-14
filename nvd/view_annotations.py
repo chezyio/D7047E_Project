@@ -6,7 +6,7 @@ from Util import utility
 from tqdm import tqdm
 from moviepy.video.io.VideoFileClip import VideoFileClip
 import cv2
-
+import numpy as np
 
 def main(opt):
     ann_file = opt.annotation_file
@@ -42,10 +42,12 @@ def main(opt):
     for frameNum, boxes in tqdm(boxesPerFrame.items()):
         if vid_file is not None:
             image = vidcap.get_frame(frameNum / vidcap.fps)
+            image = np.copy(image)
         else:
             file_name = f"frame_{frameNum:0{frame_num_len}d}{frame_ext}"
             frameFilePath = os.path.join(images_dir, file_name)
             image = cv2.imread(frameFilePath)
+            image = np.copy(image)
 
         for box in boxes:
             box.Draw(image, (0, 255, 0), 2)
