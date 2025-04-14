@@ -1,0 +1,147 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Data Statistics",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "data_stats.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "smart_plane.yaml",
+                "--filter", "2022-12-03 Nyland 01_stabilized",
+            ]
+        },
+        {
+            "name": "Extract Frames",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./Util/extract_frames.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "-f",
+                "../datasets/SmartPlane/Videos/2022-12-04 Bjenberg 02.MP4",
+                "-s",
+                "00:03",
+                "-e",
+                "00:04",
+                "-o",
+                "test",
+            ]
+        },
+        {
+            "name": "Estimate Flight Height",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "estimate_flight_height.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "../datasets/SmartPlane/Videos/test"
+            ]
+        },
+        {
+            "name": "Validate",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "val.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--yolo_model",
+                "./runs/results/paper/new/train/without_aug/yolov8s/weights/best.pt",
+                "--name", "yolov8s",
+                "--project", "runs/val/paper/without_aug"
+            ]
+        },
+        {
+            "name": "Prepare Data",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "prepare_data.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--source", "../datasets/SmartPlane/Videos/",
+                "--data_dir", "../datasets/SmartPlane/", 
+                "--test_files", "../datasets/SmartPlane/Videos/2022-12-23 Bjenberg 02_stabilized.xml", "../datasets/SmartPlane/Videos/2022-12-03 Nyland 01_stabilized.xml"
+            ]
+        },
+        {
+            "name": "Train",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "--yolo_model", "yolov5s",
+                "--aug",
+                "--batch", "8",
+                "--project", "runs/debug",
+                "--name", "yolov5s",
+            ]
+        },
+        {
+            "name": "Detect",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "detect.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--yolo_model",
+                "./runs/train/2022-02-17/yolov8n/weights/best.pt",
+                "--source",
+                "../datasets/SmartPlane/Videos/2022-12-02 Asjo 01_stabilized.MP4",
+                "--name",
+                "debug",
+            ]
+        },
+        {
+            "name": "View Annotations",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "view_annotations.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "../datasets/SmartPlane/Videos/2022-12-23 Bjenberg 02_stabilized.xml",
+            ]
+        },
+        {
+            "name": "View Data",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "view_data.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--type", "test",
+                "--data_file", "./smart_plane.yaml",
+                "--annotation_file", "../datasets/SmartPlane/Videos/2022-12-23 Bjenberg 02_stabilized.xml",
+            ]
+        },
+        {
+            "name": "Detect F-RCNN",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "detect_frcnn.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--model",
+                "../weights/faster_rcnn/model_final.pth",
+                "--source",
+                "../Images",
+                "--name",
+                "debug",
+            ]
+        },
+    ]
+}
