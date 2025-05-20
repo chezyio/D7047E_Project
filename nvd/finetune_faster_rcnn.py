@@ -103,12 +103,12 @@ cfg.DATALOADER.NUM_WORKERS = 4
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(
     "COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"
 )  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 16  # This is the real "batch size" commonly known to deep learning people
+cfg.SOLVER.IMS_PER_BATCH = 1  # This is the real "batch size" commonly known to deep learning people
 cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
-cfg.SOLVER.MAX_ITER = 300  # 300 iterations seems good
+cfg.SOLVER.MAX_ITER = 100  # 300 iterations seems good
 cfg.SOLVER.WARMUP_ITERS = 200
 cfg.SOLVER.STEPS = []  # do not decay learning rate
-cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128  # The "RoIHead batch size". 128 is faster, and good (default: 512)
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 64  # The "RoIHead batch size". 128 is faster, and good (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (car). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
 # NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 
@@ -154,19 +154,19 @@ cfg.MODEL.WEIGHTS = os.path.join(
 predictor = DefaultPredictor(cfg)
 
 dataset_dicts = load_dataset(data_info_file, "test")
-for d in random.sample(dataset_dicts, 3):
-    im = cv2.imread(d["file_name"])
-    outputs = predictor(
-        im
-    )  # format is documented at https://detectron2.readthedocs.io/tutorials/models.html#model-output-format
-    v = Visualizer(
-        im[:, :, ::-1],
-        metadata=dataset_metadata,
-        scale=0.5,
-    )
-    out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    f_name = "./output/pred_" + os.path.basename(d["file_name"])
-    print(cv2.imwrite(f_name, out.get_image()[:, :, ::-1]))
+# for d in random.sample(dataset_dicts, 3):
+#     im = cv2.imread(d["file_name"])
+#     outputs = predictor(
+#         im
+#     )  # format is documented at https://detectron2.readthedocs.io/tutorials/models.html#model-output-format
+#     v = Visualizer(
+#         im[:, :, ::-1],
+#         metadata=dataset_metadata,
+#         scale=0.5,
+#     )
+#     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+#     f_name = "./output/pred_" + os.path.basename(d["file_name"])
+#     print(cv2.imwrite(f_name, out.get_image()[:, :, ::-1]))
 
 evaluator = COCOEvaluator("test_set", cfg, False, output_dir="./output")
 test_loader = build_detection_test_loader(cfg, "test_set")
